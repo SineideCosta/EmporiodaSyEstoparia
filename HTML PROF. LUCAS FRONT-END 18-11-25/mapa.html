@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Localização - Empório da Sy Estoparia</title>
+
+        <!-- CSS do Projeto -->
+        <link rel="stylesheet" href="reset.css" />
+        <link rel="stylesheet" href="style-home.css" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="style-blog.css" />
+        <link rel="stylesheet" href="dark-mode.css" />
+        <link rel="stylesheet" href="chatbot.css" />
+        <link rel="stylesheet" href="agendamento.css" />
+        <link rel="stylesheet" href="cookie-consent.css" />
+        <link rel="stylesheet" href="mapa.css" />
+
+        <!-- Leaflet CSS - Biblioteca de Mapas -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        />
+        <link rel="stylesheet" href="cookie-consent.css" />
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="produtos.html">PRODUTOS</a></li>
+                <li><a href="contato.html">CONTATO</a></li>
+                <li><a href="faq-section.html">SAC</a></li>
+                <li><a href="galeria.html">GALERIA</a></li>
+                <li><a href="blog.html">BLOG</a></li>
+                <li><a href="agendamento.html">AGENDAMENTO</a></li>
+                <li><a href="calculadora.html">CALCULADORA</a></li>
+                <li><a href="mapa.html">LOCALIZAÇÃO</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1 class="titulo-principal">Empório da Sy Estoparia</h1>
+        </header>
+
+        <main>
+            <h2 class="titulo-principal-produtos">Como Chegar</h2>
+
+            <!-- Painel de Controles -->
+            <div class="mapa-controles">
+                <div class="controle-item">
+                    <button class="btn-localizacao" id="btnMinhaLocalizacao">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"
+                            />
+                        </svg>
+                        Minha Localização
+                    </button>
+                </div>
+
+                <div class="controle-item">
+                    <button class="btn-rotas" id="btnCalcularRota">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"
+                            />
+                        </svg>
+                        Calcular Rota
+                    </button>
+                </div>
+
+                <div class="controle-item">
+                    <select id="tipoMapa" class="select-tipo-mapa">
+                        <option value="streets">Ruas</option>
+                        <option value="satellite">Satélite</option>
+                        <option value="terrain">Terreno</option>
+                    </select>
+                </div>
+
+                <div class="controle-item">
+                    <button class="btn-compartilhar" id="btnCompartilhar">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"
+                            />
+                        </svg>
+                        Compartilhar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Container do Mapa -->
+            <div class="mapa-container">
+                <!-- Mapa será renderizado aqui -->
+                <div id="mapa" class="mapa"></div>
+
+                <!-- Painel de Informações -->
+                <div class="info-panel" id="infoPanel">
+                    <button class="fechar-panel" id="fecharPanel">×</button>
+                    <div class="info-content" id="infoContent">
+                        <!-- Conteúdo dinâmico -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards de Localização
+            <section class="localizacoes-disponiveis">
+                <h3>Nossas Unidades</h3>
+                <div class="localizacoes-grid">
+                    Unidade 1 - PERSONALIZE 
+                    <div
+                        class="local-card"
+                        data-lat="-25.4284"
+                        data-lng="-49.2733"
+                        data-id="unidade1"
+                    > -->
+                        <!--<div class="local-icon">📍</div>
+                        <h4>Unidade 1</h4>
+                        <p class="local-endereco">
+                            Rua Jose Linhares, 123<br />Veneza - Cascavel/PR
+                        </p>
+                        <p class="local-horario">Seg-Sex: 8h-18h</p>
+                        <div class="local-acoes">
+                            <button class="btn-ir-mapa" data-target="unidade1">
+                                Ver no Mapa
+                            </button>
+                            <a href="tel:+5545999455555" class="btn-ligar">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+                                    />
+                                </svg>
+                                Ligar
+                            </a>
+                        </div>
+                        <span class="distancia" data-distancia="unidade1"
+                            >Calculando...</span
+                        >
+                    </div>
+
+                    Unidade 2 - PERSONALIZE
+                    <div
+                        class="local-card"
+                        data-lat="-25.4195"
+                        data-lng="-49.2646"
+                        data-id="unidade2"
+                    >
+                        <div class="local-icon">📍</div>
+                        <h4>Unidade 2</h4>
+                        <p class="local-endereco">
+                            Rua Gumercindo Pompeu da Silva, 765<br />Alto Alegre
+                            - Cascavel/PR
+                        </p>
+                        <p class="local-horario">Seg-Sex: 8h-18h</p>
+                        <div class="local-acoes">
+                            <button class="btn-ir-mapa" data-target="unidade2">
+                                Ver no Mapa
+                            </button>
+                            <a href="tel:+5545999455554" class="btn-ligar">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+                                    />
+                                </svg>
+                                Ligar
+                            </a>
+                        </div>
+                        <span class="distancia" data-distancia="unidade2"
+                            >Calculando...</span
+                        >
+                    </div> -->
+
+                    <!-- Adicione mais unidades conforme necessário -->
+                </div>
+            </section>
+
+            <!-- Instruções de Acesso -->
+            <section class="instrucoes-acesso">
+                <h3>Como Chegar</h3>
+                <div class="instrucoes-grid">
+                    <div class="instrucao-item">
+                        <div class="instrucao-icon">🚗</div>
+                        <h4>De Carro</h4>
+                        <p>
+                            Estacionamento próprio.
+                        </p>
+                    </div>
+                    <div class="instrucao-item">
+                        <div class="instrucao-icon">🚌</div>
+                        <h4>Transporte Público</h4>
+                        <p>
+                            Linhas de ônibus: Rua Italia-Leste/Sul.
+                        </p>
+                    </div>
+                    <div class="instrucao-item">
+                        <div class="instrucao-icon">🚶</div>
+                        <h4>Acessibilidade</h4>
+                        <p>
+                            Entrada acessível para cadeirantes.
+                        </p>
+                    </div>                   
+                </div>
+            </section>
+
+            <!-- Botão Flutuante do Chat -->
+            <div class="chat-widget">
+                <div class="chat-button" id="chatButton">
+                    <svg
+                        class="chat-icon"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"
+                        />
+                    </svg>
+                    <svg
+                        class="close-icon"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        style="display: none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                        />
+                    </svg>
+                    <span class="chat-badge" id="chatBadge">1</span>
+                </div>
+
+                <!-- Janela do Chat -->
+                <div class="chat-window" id="chatWindow">
+                    <!-- Header do Chat -->
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <img
+                                src="assets/Logo 1 200x100.png"
+                                alt="Assistente"
+                            />
+                        </div>
+                        <div class="chat-info">
+                            <h4>Empório da Sy Estoparia</h4>
+                            <span class="chat-status online">Online agora</span>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="minimize-btn" id="minimizeChat">
+                                −
+                            </button>
+                            <button class="close-chat-btn" id="closeChatBtn">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Área de Mensagens -->
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            <div class="message-avatar">
+                                <img
+                                    src="assets/Logo 1 200x100.png"
+                                    alt="Bot"
+                                />
+                            </div>
+                            <div class="message-content">
+                                <p>
+                                    Olá! 👋 Sou o assistente virtual da Empório
+                                    da Sy Estoparia. Como posso ajudá-lo hoje?
+                                </p>
+                                <span class="message-time">Agora</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sugestões Rápidas -->
+                    <div class="quick-suggestions" id="quickSuggestions">
+                        <button
+                            class="suggestion-btn"
+                            data-suggestion="horarios"
+                        >
+                            📅 Horários
+                        </button>
+                        <button
+                            class="suggestion-btn"
+                            data-suggestion="servicos"
+                        >
+                            💼 Serviços
+                        </button>
+                        <button
+                            class="suggestion-btn"
+                            data-suggestion="contato"
+                        >
+                            📞 Contato
+                        </button>
+                        <button
+                            class="suggestion-btn"
+                            data-suggestion="localizacao"
+                        >
+                            📍 Localização
+                        </button>
+                    </div>
+
+                    <!-- Área de Input -->
+                    <div class="chat-input-area">
+                        <div class="chat-input-container">
+                            <input
+                                type="text"
+                                id="chatInput"
+                                placeholder="Digite sua mensagem..."
+                                maxlength="500"
+                            />
+                            <button class="send-btn" id="sendBtn">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="chat-footer">
+                            <span
+                                class="typing-indicator"
+                                id="typingIndicator"
+                                style="display: none"
+                            >
+                                <span></span><span></span><span></span>
+                                Digitando...
+                            </span>
+                            <button class="whatsapp-btn" id="whatsappBtn">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.53 3.488"
+                                    />
+                                </svg>
+                                Continuar no WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notificação de Nova Mensagem -->
+                <div
+                    class="chat-notification"
+                    id="chatNotification"
+                    style="display: none"
+                >
+                    <div class="notification-content">
+                        <strong>Nova mensagem!</strong>
+                        <p>O assistente respondeu sua pergunta</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <img
+                src="assets/Logo branca 200x100.png"
+                alt="Empório da Sy Estoparia"
+            />
+            <p class="copyright">
+                &copy; Copyright Empório da Sy Estoparia - 2025 <br> CNPJ 52.166.876/0001-00 Rua Alterio Sordi 238 Jdim. Veneza Cascavel/Pr Tel. 45984115699 </br>
+            </p>
+        </footer>
+
+        <!-- Leaflet JS - Biblioteca de Mapas -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <!-- Script do Mapa -->
+        <script src="mapa.js"></script>
+        <script src="dark-mode.js"></script>
+        <script src="chatbot.js"></script>
+        <script src="analytics-setup.js"></script>
+    </body>
+</html>
+mapa.html
+Exibindo calculadora.html.
